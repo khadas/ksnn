@@ -180,7 +180,7 @@ if __name__ == '__main__':
 	if args.video_device :
 		cap_num = args.video_device
 	else :
-		sys.exit("video device not found !!! Please use format :--vide-device ")
+		sys.exit("video device not found !!! Please use format :--video-device ")
 	if args.so_lib :
 		solib = args.so_lib
 	else :
