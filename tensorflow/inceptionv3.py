@@ -43,7 +43,7 @@ if __name__ == "__main__":
 		sys.exit("so lib not found !!! Please specify argument: --so-lib /path/to/lib")
 
 	inception = KSNN('VIM3')
-	inception.nn_version()
+	print(' |---+ KSNN Version: {} +---| '.format(inception.get_nn_version()))
 	inception.nn_init(c_lib_p = solib, nb_p = nbfile)
 	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
 	f32_data = inception.nn_inference(img,platform = 'TENSORFLOW',out_format = out_format.OUT_FORMAT_FLOAT32)

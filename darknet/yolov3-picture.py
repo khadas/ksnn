@@ -193,6 +193,7 @@ if __name__ == '__main__':
 		sys.exit(" so lib not found !!! Please use format :--so-lib ")
 
 	yolov3 = KSNN('VIM3')
+	print(' |---+ KSNN Version: {} +---| '.format(yolov3.get_nn_version()))
 	yolov3.nn_init(c_lib_p = solib, nb_p = nbfile)
 	img = cv.imread( args.input_picture_path, cv.IMREAD_COLOR )
 	data = yolov3.nn_inference(img, platform='DARKNET', reorder='2 1 0', num=3)
