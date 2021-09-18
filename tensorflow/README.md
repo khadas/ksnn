@@ -14,4 +14,19 @@ $ ./convert \
 --kboard VIM3
 ```
 
+```sh
+$ ./convert \
+--model-name mobilenet_ssd \
+--convert-platform tensorflow \
+--tf-inputs FeatureExtractor/MobilenetV1/MobilenetV1/Conv2d_0/BatchNorm/batchnorm/mul_1 \
+--tf-input-size-list '300,300,3' \
+--tf-outputs "'concat concat_1'" \
+--tf-model-file ~/Downloads/ssd_mobilenet_v1_coco_2017_11_17.pb \
+--source-file-path ../demo/data/validation_tf.txt \
+--channel-mean-value '127.5 127.5 127.5 127.5' \
+--quantized-dtype asymmetric_affine-u8 \
+--reorder-channel '0 1 2' \
+--kboard VIM3
+```
+
 if you use VIM3L , please use `--kboard VIM3L`
