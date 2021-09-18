@@ -4,14 +4,13 @@ import urllib.request
 from matplotlib import gridspec
 from matplotlib import pyplot as plt
 from PIL import Image
-from ctypes import *
 import argparse
 import sys
 import math
 from ksnn.api import KSNN
 from ksnn.types import *
 import cv2 as cv
-
+import time
 
 GRID0 = 13
 GRID1 = 26
@@ -194,9 +193,20 @@ if __name__ == '__main__':
 
 	yolov3 = KSNN('VIM3')
 	print(' |---+ KSNN Version: {} +---| '.format(yolov3.get_nn_version()))
+
+	print('Start init neural network ...')
 	yolov3.nn_init(c_lib_p = solib, nb_p = nbfile)
+	print('Done.')
+
+	print('Get input data ...')
 	img = cv.imread( args.input_picture_path, cv.IMREAD_COLOR )
+	print('Done.')
+
+	print('Start inference ...')
+	start = time.time()
 	data = yolov3.nn_inference(img, platform='DARKNET', reorder='2 1 0', num=3)
+	end = time.time()
+	print('Done. inference time: ', end - start)
 
 	input0_data = data[0]
 	input1_data = data[1]

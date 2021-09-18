@@ -4,7 +4,6 @@ import urllib.request
 from matplotlib import gridspec
 from matplotlib import pyplot as plt
 from PIL import Image
-from ctypes import *
 import argparse
 import sys
 import math
@@ -188,7 +187,10 @@ if __name__ == '__main__':
 
 	yolov3 = KSNN('VIM3')
 	print(' |---+ KSNN Version: {} +---| '.format(yolov3.get_nn_version()))
+
+	print('Start init neural network ...')
 	yolov3.nn_init(c_lib_p = solib, nb_p = nbfile)
+	print('Done.')
 
 	cap = cv.VideoCapture(int(cap_num))
 	cap.set(3,1920)
@@ -197,10 +199,8 @@ if __name__ == '__main__':
 		ret,img = cap.read()
 
 		start = time.time()
-		res_data = yolov3.nn_inference(img, platform='DARKNET', reorder='2 1 0', num=3)
+		data = yolov3.nn_inference(img, platform='DARKNET', reorder='2 1 0', num=3)
 		end = time.time()
-		data = res_data.copy()
-		del res_data
 		print('inference : ', end - start)
 		input0_data = data[0]
 		input1_data = data[1]
@@ -223,8 +223,6 @@ if __name__ == '__main__':
 		cv.imshow("capture", img)
 		if cv.waitKey(1) & 0xFF == ord('q'):
 			break
-
-		del data, input0_data, input1_data, input2_data, input_data, boxes, classes, scores
 
 	cap.release()
 	cv.destroyAllWindows() 
