@@ -1,4 +1,3 @@
-from ctypes import *
 import numpy as np
 import os      
 import argparse
@@ -6,10 +5,11 @@ import sys
 from ksnn.api import KSNN
 from ksnn.types import *
 import cv2 as cv
+import time
 
 def show_top5(output):
 	output_sorted = sorted(output, reverse=True)
-	top5_str = '----Resnet50\n-----TOP 5-----\n'
+	top5_str = '----Resnet50----\n-----TOP 5-----\n'
 	for i in range(5):
 		value = output_sorted[i]
 		index = np.where(output == value)
@@ -53,10 +53,21 @@ if __name__ == "__main__":
 
 	resnet50 = KSNN('VIM3')
 	print(' |---+ KSNN Version: {} +---| '.format(resnet50.get_nn_version()))
+
+	print('Start init neural network ...')
 	resnet50.nn_init(c_lib_p = solib, nb_p = nbfile)
+	print('Done.')
+
+	print('Get input data ...')
 	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
-	f32_data = resnet50.nn_inference(img, platform = 'ONNX', reorder='0 1 2', out_format=out_format.OUT_FORMAT_FLOAT32)
-	print(f32_data[0][0])
-	show_top5(softmax(np.array(f32_data[0],dtype=np.float32)))
+	print('Done.')
+	
+	print('Start inference ...')
+	end = time.time()
+	outputs = resnet50.nn_inference(img, platform = 'ONNX', reorder='2 1 0', out_format=out_format.OUT_FORMAT_FLOAT32)
+	end = time.time()
+	print('Done. inference time: ', end - start)
+	
+	show_top5(softmax(np.array(outputs[0],dtype=np.float32)))
 
 
