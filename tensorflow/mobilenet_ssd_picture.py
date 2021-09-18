@@ -1,4 +1,3 @@
-from ctypes import *
 import numpy as np
 import os      
 import argparse
@@ -161,13 +160,20 @@ if __name__ == "__main__":
 
 	ssd = KSNN('VIM3')
 	print(' |---+ KSNN Version: {} +---| '.format(ssd.get_nn_version()))
-	ssd.nn_init(c_lib_p = solib, nb_p = nbfile)
-	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
 
+	print('Start init neural network ...')
+	ssd.nn_init(c_lib_p = solib, nb_p = nbfile)
+	print('Done.')
+
+	print('Get input data ...')
+	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
+	print('Done,')
+
+	print('Start inference ...')
 	start = time.time()
 	outputs = ssd.nn_inference(img,platform = 'TENSORFLOW', num=2, reorder='0 1 2', out_format = out_format.OUT_FORMAT_FLOAT32)
 	end = time.time()
-	print('inference : ', end - start)
+	print('Done. inference : ', end - start)
 
 	predictions = outputs[0].reshape((1, NUM_RESULTS, 4))
 	outputClasses = outputs[1].reshape((1, NUM_RESULTS, NUM_CLASSES))

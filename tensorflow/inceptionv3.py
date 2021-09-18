@@ -1,4 +1,3 @@
-from ctypes import *
 import numpy as np
 import os      
 import argparse
@@ -6,6 +5,7 @@ import sys
 from ksnn.api import KSNN
 from ksnn.types import *
 import cv2 as cv
+import time
 
 def show_top5( f32_data ):
 	list_result = []
@@ -44,9 +44,22 @@ if __name__ == "__main__":
 
 	inception = KSNN('VIM3')
 	print(' |---+ KSNN Version: {} +---| '.format(inception.get_nn_version()))
+
+	print('Start init neural network ...')
 	inception.nn_init(c_lib_p = solib, nb_p = nbfile)
+	print('Done.')
+
+	print('Get input data ...')
 	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
-	f32_data = inception.nn_inference(img,platform = 'TENSORFLOW',out_format = out_format.OUT_FORMAT_FLOAT32)
-	show_top5(f32_data[0])
+	print('Done.')
+
+	print('Start inference ...')
+	start = time.time()
+	outputs = inception.nn_inference(img,platform = 'TENSORFLOW',out_format = out_format.OUT_FORMAT_FLOAT32)
+	end = time.time()
+	print('Done. inference : ', end - start)
+
+
+	show_top5(outputs[0])
 
 
