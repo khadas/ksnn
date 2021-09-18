@@ -1,4 +1,3 @@
-from ctypes import *
 import numpy as np
 import os      
 import argparse
@@ -6,11 +5,12 @@ import sys
 from ksnn.api import KSNN
 from ksnn.types import *
 import cv2 as cv
+import time
 
 def show_top5(outputs):
 	output = outputs[0].reshape(-1)
 	output_sorted = sorted(output, reverse=True)
-	top5_str = '----Mobilenet\n-----TOP 5-----\n'
+	top5_str = '----Mobilenet----\n-----TOP 5-----\n'
 	for i in range(5):
 		value = output_sorted[i]
 		index = np.where(output == value)
@@ -52,9 +52,20 @@ if __name__ == "__main__":
 
 	mobilenet_caffe = KSNN('VIM3')
 	print(' |---+ KSNN Version: {} +---| '.format(mobilenet_caffe.get_nn_version()))
+	print('Start init neural network ...')
 	mobilenet_caffe.nn_init(c_lib_p = solib, nb_p = nbfile)
+	print('Done.')
+
+	print('Get input data ...')
 	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
-	f32_data = mobilenet_caffe.nn_inference(img, platform = 'CAFFE', reorder='2 1 0', out_format=out_format.OUT_FORMAT_FLOAT32)
-	show_top5(f32_data)
+	print('Done.')
+
+	print('Start inference ...')
+	start = time.time()
+	outputs = mobilenet_caffe.nn_inference(img, platform = 'CAFFE', reorder='2 1 0', out_format=out_format.OUT_FORMAT_FLOAT32)
+	end = time.time()
+	print('Done. inference time: ', end - start)
+
+	show_top5(outputs)
 
 
