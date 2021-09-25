@@ -55,16 +55,18 @@ if __name__ == "__main__":
 	print(' |---+ KSNN Version: {} +---| '.format(resnet50.get_nn_version()))
 
 	print('Start init neural network ...')
-	resnet50.nn_init(c_lib_p = solib, nb_p = nbfile)
+	resnet50.nn_init(c_lib_p = solib, nb_p = nbfile, level=0)
 	print('Done.')
 
 	print('Get input data ...')
+	cv_img = []
 	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
+	cv_img.append(img)
 	print('Done.')
 	
 	print('Start inference ...')
-	end = time.time()
-	outputs = resnet50.nn_inference(img, platform = 'ONNX', reorder='2 1 0', out_format=out_format.OUT_FORMAT_FLOAT32)
+	start = time.time()
+	outputs = resnet50.nn_inference(cv_img, platform = 'ONNX', reorder='2 1 0', out_format=out_format.OUT_FORMAT_FLOAT32)
 	end = time.time()
 	print('Done. inference time: ', end - start)
 	
