@@ -229,4 +229,4 @@ if __name__ == '__main__':
 		draw(img, boxes, scores, classes)
 
 	cv.imshow("results", img)
-	cv.waitKey(1)
+	cv.waitKey(0)
