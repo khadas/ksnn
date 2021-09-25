@@ -56,17 +56,19 @@ if __name__ == "__main__":
 
 	print('Start init neural network ...')
 
-	resnet18.nn_init(c_lib_p = solib, nb_p = nbfile)
+	resnet18.nn_init(c_lib_p = solib, nb_p = nbfile, level=0)
 
 	print('Done.')
 
 	print('Get input data ...')
+	cv_img = []
 	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
+	cv_img.append(img)
 	print('Done.')
 
 	print('Start inference ...')
 	start = time.time()
-	outputs = resnet18.nn_inference(img, platform = 'PYTORCH', reorder='2 1 0', out_format=out_format.OUT_FORMAT_FLOAT32)
+	outputs = resnet18.nn_inference(cv_img, platform = 'PYTORCH', reorder='2 1 0', out_format=out_format.OUT_FORMAT_FLOAT32)
 	end = time.time()
 	print('Done. inference : ', end - start)
 
