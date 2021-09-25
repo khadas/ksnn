@@ -54,16 +54,18 @@ if __name__ == "__main__":
 	print(' |---+ KSNN Version: {} +---| '.format(mobilenet_tflite.get_nn_version()))
 
 	print('Start init neural network ...')
-	mobilenet_tflite.nn_init(c_lib_p = solib, nb_p = nbfile)
+	mobilenet_tflite.nn_init(c_lib_p = solib, nb_p = nbfile, level=0)
 	print('Done.')
 
 	print('Get input data ...')
+	cv_img = []
 	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
+	cv_img.append(img)
 	print('Done.')
 
 	print('Start inference ...')
 	start = time.time()
-	outputs = mobilenet_tflite.nn_inference(img, platform = 'TFLITE', reorder='0 1 2', out_format=out_format.OUT_FORMAT_FLOAT32)
+	outputs = mobilenet_tflite.nn_inference(cv_img, platform = 'TFLITE', reorder='0 1 2', out_format=out_format.OUT_FORMAT_FLOAT32)
 	end = time.time()
 	print('Done. inference : ', end - start)
 
