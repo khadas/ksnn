@@ -162,16 +162,18 @@ if __name__ == "__main__":
 	print(' |---+ KSNN Version: {} +---| '.format(ssd.get_nn_version()))
 
 	print('Start init neural network ...')
-	ssd.nn_init(c_lib_p = solib, nb_p = nbfile)
+	ssd.nn_init(c_lib_p = solib, nb_p = nbfile, level=0)
 	print('Done.')
 
 	print('Get input data ...')
+	cv_img = []
 	img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
+	cv_img.append(img)
 	print('Done,')
 
 	print('Start inference ...')
 	start = time.time()
-	outputs = ssd.nn_inference(img,platform = 'TENSORFLOW', num=2, reorder='0 1 2', out_format = out_format.OUT_FORMAT_FLOAT32)
+	outputs = ssd.nn_inference(cv_img,platform = 'TENSORFLOW', output_num=2, reorder='0 1 2', out_format = out_format.OUT_FORMAT_FLOAT32)
 	end = time.time()
 	print('Done. inference : ', end - start)
 
