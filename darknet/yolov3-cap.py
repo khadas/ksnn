@@ -189,17 +189,18 @@ if __name__ == '__main__':
 	print(' |---+ KSNN Version: {} +---| '.format(yolov3.get_nn_version()))
 
 	print('Start init neural network ...')
-	yolov3.nn_init(c_lib_p = solib, nb_p = nbfile)
+	yolov3.nn_init(c_lib_p = solib, nb_p = nbfile,level=0)
 	print('Done.')
 
 	cap = cv.VideoCapture(int(cap_num))
 	cap.set(3,1920)
 	cap.set(4,1080)
 	while(1):
+		cv_img = []
 		ret,img = cap.read()
-
+		cv_img.append(img)
 		start = time.time()
-		data = yolov3.nn_inference(img, platform='DARKNET', reorder='2 1 0', num=3)
+		data = yolov3.nn_inference(cv_img, platform='DARKNET', reorder='2 1 0', output_num=3)
 		end = time.time()
 		print('inference : ', end - start)
 		input0_data = data[0]

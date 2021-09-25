@@ -195,16 +195,18 @@ if __name__ == '__main__':
 	print(' |---+ KSNN Version: {} +---| '.format(yolov3.get_nn_version()))
 
 	print('Start init neural network ...')
-	yolov3.nn_init(c_lib_p = solib, nb_p = nbfile)
+	yolov3.nn_init(c_lib_p = solib, nb_p = nbfile,level=0)
 	print('Done.')
 
 	print('Get input data ...')
+	cv_img =  []
 	img = cv.imread( args.input_picture_path, cv.IMREAD_COLOR )
+	cv_img.append(img)
 	print('Done.')
 
 	print('Start inference ...')
 	start = time.time()
-	data = yolov3.nn_inference(img, platform='DARKNET', reorder='2 1 0', num=3)
+	data = yolov3.nn_inference(cv_img, platform='DARKNET', reorder='2 1 0', output_num=3)
 	end = time.time()
 	print('Done. inference time: ', end - start)
 
@@ -227,4 +229,4 @@ if __name__ == '__main__':
 		draw(img, boxes, scores, classes)
 
 	cv.imshow("results", img)
-	cv.waitKeyEx(0)
+	cv.waitKey(1)
