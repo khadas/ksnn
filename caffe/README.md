@@ -1,14 +1,20 @@
+# Run
+
+```sh
+$ python3 mobilenet.py --model ./models/VIM3/mobilenet_caffe.nb --library ./libs/libnn_mobilenet.so --picture data/goldfish_224x224.jpg --level 0
+```
+
+# Convert
+
 ```sh
 ./convert \
 --model-name mobilenet_caffe \
---convert-platform caffe \
---caffe-model-file mobilenet_v2.caffemodel \
---caffe-proto-file mobilenet_v2.prototxt \
---channel-mean-value '103.94 116.78 123.68 58.82' \
---quantized-dtype asymmetric_affine-u8 \
---source-file-path ../demo/data/validation_tf.txt \
---reorder-channel '2 1 0' \
---kboard VIM3
+--platform caffe \
+--model mobilenet_v2.prototxt \
+--weights mobilenet_v2.caffemodel \
+--mean-values '103.94,116.78,123.68,58.82' \
+--quantized-dtype asymmetric_affine \
+--kboard VIM3 --print-level 1
 ```
 
-if you use VIM3L , please use `--kboard VIM3L`
+If you use VIM3L , please use `VIM3L` to replace `VIM3`

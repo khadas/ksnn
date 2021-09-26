@@ -1,12 +1,19 @@
+# Run
+
+```sh
+$ python3 xception.py --model ./models/VIM3/xception.nb --library ./libs/libnn_xception.so --picture data/goldfish_299x299.jpg
+```
+
+# Convert
+
 ```sh
 $ ./convert \
 --model-name xception \
---convert-platform keras \
---keras-model-file xception.h5 \
---source-file-path ../demo/data/validation_tf.txt \
---channel-mean-value '127.5 127.5 127.5 127.5' \
---quantized-dtype asymmetric_affine-u8 \
---reorder-channel '0 1 2' \
---kboard VIM3
+--platform keras \
+--model xception.h5 \
+--mean-values '127.5,127.5,127.5,127.5' \
+--quantized-dtype asymmetric_affine \
+--kboard VIM3 --print-level 1
 ```
-if you use VIM3L , please use `--kboard VIM3L`
+
+If you use VIM3L , please use `VIM3L` to replace `VIM3`

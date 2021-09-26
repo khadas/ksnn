@@ -1,13 +1,19 @@
+# Run
+
+```sh
+$ python3 resnet50.py --model ./models/VIM3/resnet50.nb --library ./libs/libnn_resnet50.so --picture ./data/goldfish_224x224.jpg --level 0
+```
+
+# convert
+
 ```sh
 $ ./convert \
 --model-name resnet50 \
---convert-platform onnx \
---onnx-model-file resnet50v2.onnx \
---source-file-path ../demo/data/validation_tf.txt \
---channel-mean-value '123.675 116.28 103.53 58.82' \
---quantized-dtype asymmetric_affine-u8 \
---reorder-channel '0 1 2' \
---kboard VIM3
+--platform onnx \
+--model resnet50v2.onnx \
+--mean-values '123.675,116.28,103.53,58.82' \
+--quantized-dtype asymmetric_affine \
+--kboard VIM3 --print-level 1
 ```
 
-if you use VIM3L , please use `--kboard VIM3L`
+If you use VIM3L , please use `VIM3L` to replace `VIM3`

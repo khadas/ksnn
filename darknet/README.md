@@ -1,15 +1,21 @@
-# yolov3 convert parameters
+# Run
+
+```sh
+$ python3 yolov3-picture.py --model ./models/VIM3/yolov3.nb --library ./libs/libnn_yolov3.so --picture ./data/1080p.bmp
+$ python3 yolov3-cap.py --model ./models/VIM3/yolov3.nb --library ./libs/libnn_yolov3.so --video-device X
+```
+
+# Convert
 
 ```sh
 $ ./convert \
 --model-name yolov3 \
---convert-platform darknet \
---darknet-net-input yolov3.cfg \
---darknet-weight-input yolov3.weights \
---source-file-path ../demo/data/validation_tf.txt \
---channel-mean-value '0 0 0 256' \
---quantized-dtype asymmetric_affine-u8 \
---reorder-channel '2 1 0' \
---kboard VIM3
+--platform darknet \
+--model yolov3.cfg \
+--weights yolov3.weights \
+--mean-values '0,0,0,256' \
+--quantized-dtype asymmetric_affine \
+--kboard VIM3 --print-level 1
 ```
-if you use VIM3L , please use `--kboard VIM3L`
+
+If you use VIM3L , please use `VIM3L` to replace `VIM3`
