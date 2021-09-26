@@ -168,39 +168,53 @@ def draw(image, boxes, scores, classes):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--nb-file", help="the path for nb file")
-    parser.add_argument("--so-lib", help="the path for so lib")
+    parser.add_argument("--library", help="Path to C static library file")
+    parser.add_argument("--model", help="Path to nbg file")
     parser.add_argument("--video-device", help="the number for video device")
+    parser.add_argument("--level", help="Information printer level: 0/1/2")
+
     args = parser.parse_args()
-    if args.nb_file :
-        nbfile = args.nb_file
-    else :
-        sys.exit("nb-file not found !!! Please use format :--nb-file")
+    
+    if args.model :
+        if os.path.exists(args.model) == False:
+            sys.exit('Model \'{}\' not exist'.format(args.model))
+        model = args.model
+    else:
+        sys.exit("NBG file not found !!! Please use format: --model")
     if args.video_device :
         cap_num = args.video_device
     else :
         sys.exit("video device not found !!! Please use format :--video-device ")
-    if args.so_lib :
-        solib = args.so_lib
+    if args.library :
+        if os.path.exists(args.library) == False :
+            sys.exit('C static library \'{}\' not exist'.format(args.library))
+        library = args.library
     else :
-        sys.exit(" so lib not found !!! Please use format :--so-lib ")
+        sys.exit("C static library not found !!! Please use format: --library")
+    if args.level == '1' or args.level == '2' :
+        level = int(args.level)
+    else :
+        level = 0
 
     yolov3 = KSNN('VIM3')
     print(' |---+ KSNN Version: {} +---| '.format(yolov3.get_nn_version()))
 
     print('Start init neural network ...')
-    yolov3.nn_init(c_lib_p = solib, nb_p = nbfile,level=0)
+    yolov3.nn_init(library=library, model=model, level=level)
     print('Done.')
 
     cap = cv.VideoCapture(int(cap_num))
     cap.set(3,1920)
     cap.set(4,1080)
     while(1):
-        cv_img = []
+        cv_img = list()
         ret,img = cap.read()
         cv_img.append(img)
         start = time.time()
-        data = yolov3.nn_inference(cv_img, platform='DARKNET', reorder='2 1 0', output_num=3)
+        '''
+               default input_tensor is 1
+        '''
+        data = yolov3.nn_inference(cv_img, platform='DARKNET', reorder='2 1 0', output_tensor=3, output_format=output_format.OUT_FORMAT_FLOAT32)
         end = time.time()
         print('inference : ', end - start)
         input0_data = data[0]

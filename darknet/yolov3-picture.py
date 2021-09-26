@@ -172,41 +172,55 @@ def draw(image, boxes, scores, classes):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--nb-file", help="the path for nb file")
-    parser.add_argument("--so-lib", help="the path for so lib")
-    parser.add_argument("--input-picture-path", help="the path for input picture")
+    parser.add_argument("--library", help="Path to C static library file")
+    parser.add_argument("--model", help="Path to nbg file")
+    parser.add_argument("--picture", help="Path to input picture")
+    parser.add_argument("--level", help="Information printer level: 0/1/2")
+
     args = parser.parse_args()
-    if args.nb_file :
-        nbfile = args.nb_file
+    if args.model :
+        if os.path.exists(args.model) == False:
+            sys.exit('Model \'{}\' not exist'.format(args.model))
+        model = args.model
     else :
-        sys.exit("nb-file not found !!! Please use format :--nb-file")
-    if args.input_picture_path :
-        if os.path.exists(args.input_picture_path) == False:
-            sys.exit(args.input_picture_path + ' not exist')
-        inputpicturepath = bytes(args.input_picture_path,encoding='utf-8')
+        sys.exit("NBG file not found !!! Please use format: --model")
+    if args.picture :
+        if os.path.exists(args.picture) == False:
+            sys.exit('Input picture \'{}\' not exist'.format(args.picture))
+        picture = args.picture
     else :
-        sys.exit(" input-picture-path not found !!! Please use format :--input-picture-path ")
-    if args.so_lib :
-        solib = args.so_lib
+        sys.exit("Input picture not found !!! Please use format: --picture")
+    if args.library :
+        if os.path.exists(args.library) == False:
+            sys.exit('C static library \'{}\' not exist'.format(args.library))
+        library = args.library
     else :
-        sys.exit(" so lib not found !!! Please use format :--so-lib ")
+        sys.exit("C static library not found !!! Please use format: --library")
+    if args.level == '1' or args.level == '2' :
+        level = int(args.level)
+    else :
+        level = 0
 
     yolov3 = KSNN('VIM3')
     print(' |---+ KSNN Version: {} +---| '.format(yolov3.get_nn_version()))
 
     print('Start init neural network ...')
-    yolov3.nn_init(c_lib_p = solib, nb_p = nbfile,level=0)
+    yolov3.nn_init(library=library, model=model, level=level)
     print('Done.')
 
     print('Get input data ...')
-    cv_img =  []
-    img = cv.imread( args.input_picture_path, cv.IMREAD_COLOR )
+    cv_img =  list()
+    img = cv.imread(picture, cv.IMREAD_COLOR)
     cv_img.append(img)
     print('Done.')
 
     print('Start inference ...')
     start = time.time()
-    data = yolov3.nn_inference(cv_img, platform='DARKNET', reorder='2 1 0', output_num=3)
+
+    '''
+        default input_tensor is 1
+    '''
+    data = yolov3.nn_inference(cv_img, platform='DARKNET', reorder='2 1 0', output_tensor=3, output_format=output_format.OUT_FORMAT_FLOAT32)
     end = time.time()
     print('Done. inference time: ', end - start)
 
