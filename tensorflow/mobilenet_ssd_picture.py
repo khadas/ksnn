@@ -129,51 +129,61 @@ def draw(img, vaildCnt, candidateBox, predictions, scoreBox):
                     (xmin, ymin),
                     cv.FONT_HERSHEY_SIMPLEX,
                     0.6, (0, 0, 255), 2)
-
-    cv.imwrite("out.jpg", img)
+    cv.imshow("results", img)
+    cv.waitKey(0)
 
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("--nb-file", help="path to nb file")
-    parser.add_argument("--so-lib", help="path to so lib")
-    parser.add_argument("--input-picture", help="path to input picture")
+    parser.add_argument("--library", help="Path to C static library file")
+    parser.add_argument("--model", help="Path to nbg file")
+    parser.add_argument("--picture", help="Path to input picture")
+    parser.add_argument("--level", help="Information printer level: 0/1/2")
+ 
     args = parser.parse_args()
-    if args.nb_file :
-        if os.path.exists(args.nb_file) == False:
-            sys.exit('nb file \'' + args.nb_file + '\' not exist')
-        nbfile = args.nb_file
+    if args.model :
+        if os.path.exists(args.model) == False:
+            sys.exit('Model \'{}\' not exist'.format(args.model))
+        model = args.model
     else :
-        sys.exit("nb file not found !!! Please specify argument: --nb-file /path/to/nb-file")
-    if args.input_picture :
-        if os.path.exists(args.input_picture) == False:
-            sys.exit('input picture \'' + args.input_picture + '\' not exist')
-        inputpicturepath = bytes(args.input_picture,encoding='utf-8')
+        sys.exit("NBG file not found !!! Please use format: --model")
+    if args.picture :
+        if os.path.exists(args.picture) == False:
+            sys.exit('Input picture \'{}\' not exist'.format(args.picture))
+        picture = args.picture
     else :
-        sys.exit("input picture not found !!! Please specify argument: --input-picture /path/to/picture")
-    if args.so_lib :
-        if os.path.exists(args.so_lib) == False:
-            sys.exit('so lib \'' + args.so_lib + '\' not exist')
-        solib = args.so_lib
+        sys.exit("Input picture not found !!! Please use format: --picture")
+    if args.library :
+        if os.path.exists(args.library) == False:
+            sys.exit('C static library \'{}\' not exist'.format(args.library))
+        library = args.library
     else :
-        sys.exit("so lib not found !!! Please specify argument: --so-lib /path/to/lib")
+        sys.exit("C static library not found !!! Please use format: --library")
+    if args.level == '1' or args.level == '2' :
+        level = int(args.level)
+    else :
+        level = 0
 
     ssd = KSNN('VIM3')
     print(' |---+ KSNN Version: {} +---| '.format(ssd.get_nn_version()))
 
     print('Start init neural network ...')
-    ssd.nn_init(c_lib_p = solib, nb_p = nbfile, level=0)
+    ssd.nn_init(library=library, model=model, level=level)
     print('Done.')
 
     print('Get input data ...')
     cv_img = []
-    img = cv.imread( args.input_picture, cv.IMREAD_COLOR )
+    img = cv.imread(picture, cv.IMREAD_COLOR)
     cv_img.append(img)
     print('Done,')
 
     print('Start inference ...')
     start = time.time()
-    outputs = ssd.nn_inference(cv_img,platform = 'TENSORFLOW', output_num=2, reorder='0 1 2', out_format = out_format.OUT_FORMAT_FLOAT32)
+    '''
+        default input_tensor is 1
+    '''
+    outputs = ssd.nn_inference(cv_img,platform = 'TENSORFLOW', output_tensor=2, reorder='0 1 2', output_format=output_format.OUT_FORMAT_FLOAT32)
     end = time.time()
     print('Done. inference : ', end - start)
 
