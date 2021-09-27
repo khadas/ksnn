@@ -1,7 +1,7 @@
 # Run
 
 ```sh
-$ python3 resnet18.py --model ./models/VIM3/resnet18.nb --library ./libs/libnn_resnet18.so --input-picture data/goldfish_224x224.jpg --level 0
+$ python3 resnet18.py --model ./models/VIM3/resnet18.nb --library ./libs/libnn_resnet18.so --picture data/goldfish_224x224.jpg --level 0
 ```
 
 # Convert

@@ -1,7 +1,7 @@
 # Run
 
 ```sh
-$ python3 xception.py --model ./models/VIM3/xception.nb --library ./libs/libnn_xception.so --picture data/goldfish_299x299.jpg
+$ python3 xception.py --model ./models/VIM3/xception.nb --library ./libs/libnn_xception.so --picture data/goldfish_299x299.jpg --level 0
 ```
 
 # Convert
