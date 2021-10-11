@@ -8,7 +8,7 @@
 $ sudo apt install python3-pip
 ```
 
-2. 安装
+2. Install KSNN
 
 ```sh
 $ pip3 install matplotlib
