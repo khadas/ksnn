@@ -2,10 +2,10 @@
 
 ```sh
 $ python3 mobilenet.py --model ./models/VIM3/mobilenet_caffe.nb --library ./libs/libnn_mobilenet.so --picture data/goldfish_224x224.jpg --level 0
-$ python3 openpose-multi-cap.py --model ./models/VIM3/openpose.nb --lbrary libs/libnn_openpose.so --device X --level 0
-$ python3 openpose-multi-picture.py --model ./models/VIM3/openpose.nb --lbrary libs/libnn_openpose.so --picture data/person.jpg --level 0
-$ python3 openpose-signle-cap.py --model ./models/VIM3/openpose.nb --lbrary libs/libnn_openpose.so --device X --level 0
-$ python3 openpose-signle-picture.py --model ./models/VIM3/openpose.nb --lbrary libs/libnn_openpose.so --picture data/person.jpg --level 0
+$ python3 openpose-multi-cap.py --model ./models/VIM3/openpose.nb --library libs/libnn_openpose.so --device X --level 0
+$ python3 openpose-multi-picture.py --model ./models/VIM3/openpose.nb --library libs/libnn_openpose.so --picture data/person.jpg --level 0
+$ python3 openpose-signle-cap.py --model ./models/VIM3/openpose.nb --library libs/libnn_openpose.so --device X --level 0
+$ python3 openpose-signle-picture.py --model ./models/VIM3/openpose.nb --library libs/libnn_openpose.so --picture data/person.jpg --level 0
 ```
 
 # Convert
