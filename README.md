@@ -12,14 +12,14 @@ $ sudo apt install python3-pip
 
 ```sh
 $ pip3 install matplotlib
-$ pip3 install ksnn/ksnn-1.0-py3-none-any.whl
+$ pip3 install ksnn/ksnn-1.1-py3-none-any.whl
 ```
 
 ## Docs
 
 1. [KSNN Usage](https://docs.khadas.com/linux/vim3/KSNNUsage.html)
 2. [KSNN Convert](https://docs.khadas.com/linux/vim3/KSNNConvert.html)
-3. API Docs: docs/ksnn_user_usage_v1.0.pdf
+3. API Docs: docs/ksnn_user_usage_v1.1.pdf
 
 ## Examples
 
