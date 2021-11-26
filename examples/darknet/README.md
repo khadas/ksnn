@@ -3,6 +3,9 @@
 ```sh
 $ python3 yolov3-picture.py --model ./models/VIM3/yolov3.nb --library ./libs/libnn_yolov3.so --picture ./data/1080p.bmp
 $ python3 yolov3-cap.py --model ./models/VIM3/yolov3.nb --library ./libs/libnn_yolov3.so --video-device X
+$ python3 yolov3-face.py --model ./models/VIM3/yolov3-face.nb --library ./libs/libnn_yolov3-face.so --video-device X
+$ python3 hand-cap.py --model ./models/VIM3/hand.nb --library ./libs/libnn_hand.so --video-device X
+$ python3 hand-tiny-cap.py --model ./models/VIM3/hand-tiny.nb --library ./libs/libnn_hand-tiny.so --video-device X
 ```
 
 # Convert
