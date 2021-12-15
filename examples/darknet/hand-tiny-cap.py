@@ -161,7 +161,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--library", help="Path to C static library file")
     parser.add_argument("--model", help="Path to nbg file")
-    parser.add_argument("--video-device", help="the number for video device")
+    parser.add_argument("--device", help="the number for video device")
     parser.add_argument("--level", help="Information printer level: 0/1/2")
 
     args = parser.parse_args()
@@ -172,10 +172,10 @@ if __name__ == '__main__':
         model = args.model
     else:
         sys.exit("NBG file not found !!! Please use format: --model")
-    if args.video_device :
-        cap_num = args.video_device
+    if args.device :
+        cap_num = args.device
     else :
-        sys.exit("video device not found !!! Please use format :--video-device ")
+        sys.exit("video device not found !!! Please use format :--device ")
     if args.library :
         if os.path.exists(args.library) == False :
             sys.exit('C static library \'{}\' not exist'.format(args.library))
