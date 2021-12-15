@@ -8,6 +8,15 @@ $ python3 hand-cap.py --model ./models/VIM3/hand.nb --library ./libs/libnn_hand.
 $ python3 hand-tiny-cap.py --model ./models/VIM3/hand-tiny.nb --library ./libs/libnn_hand-tiny.so --video-device X
 ```
 
+flask demo
+
+```sh
+$ python3 flask-yolov3.py --model ./models/VIM3/yolov3.nb --library ./libs/libnn_yolov3.so --video-device X
+$ python3 flask-face.py --model ./models/VIM3/yolov3-face.nb --library ./libs/libnn_yolov3-face.so --video-device X
+$ python3 flask-hand.py --model ./models/VIM3/hand.nb --library ./libs/libnn_hand.so --video-device X
+
+```
+
 # Convert
 
 ```sh
