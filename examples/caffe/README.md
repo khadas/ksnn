@@ -14,21 +14,22 @@ $ python3 openpose-signle-picture.py --model ./models/VIM3/openpose.nb --library
 ./convert \
 --model-name mobilenet_caffe \
 --platform caffe \
---model mobilenet_v2.prototxt \
---weights mobilenet_v2.caffemodel \
---mean-values '103.94,116.78,123.68,58.82' \
+--model /home/yan/yan/Yan/models-zoo/caffe/mobilenet_v2/mobilenet_v2.prototxt \
+--weights /home/yan/yan/Yan/models-zoo/caffe/mobilenet_v2/mobilenet_v2.caffemodel \
+--mean-values '103.94 116.78 123.68 0.01700102' \
 --quantized-dtype asymmetric_affine \
---kboard VIM3 --print-level 1
-```
+--source-files ./data/dataset/dataset0.txt \
+--kboard VIM3 --print-level 1```
 
 ```sh
 $ ./convert \
 --model-name openpose \
 --platform caffe \
---model pose_deploy_linevec.prototxt \
---weights pose_iter_440000.caffemodel \
---mean-values '0,0,0,256' \
+--model ~/yan/Yan/models-zoo/caffe/openpose/pose_deploy_linevec.prototxt \
+--weights ~/yan/Yan/models-zoo-big/openpose-368.caffemodel \
+--mean-values '0 0 0 0.00390625' \
 --quantized-dtype asymmetric_affine \
+--source-files ./data/dataset/dataset0.txt \
 --kboard VIM3 --print-level 1
 ```
 

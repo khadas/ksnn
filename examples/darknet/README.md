@@ -23,11 +23,35 @@ $ python3 flask-hand.py --model ./models/VIM3/hand.nb --library ./libs/libnn_han
 $ ./convert \
 --model-name yolov3 \
 --platform darknet \
---model yolov3.cfg \
---weights yolov3.weights \
---mean-values '0,0,0,256' \
+--model /home/yan/yan/git/neural_network/darknet/darknet/cfg/yolov3.cfg \
+--weights /home/yan/yan/Yan/models-zoo-big/yolov3.weights \
+--mean-values '0 0 0 0.00390625' \
 --quantized-dtype asymmetric_affine \
+--source-files ./data/dataset/dataset0.txt \
 --kboard VIM3 --print-level 1
 ```
+```sh
+$ ./convert \
+--model-name hand \
+--platform darknet \
+--model /home/yan/yan/tmp/yolo-hand-detection/models/cross-hands.cfg \
+--weights /home/yan/yan/tmp/yolo-hand-detection/models/cross-hands.weights \
+--mean-values '0 0 0 0.00390625' \
+--quantized-dtype asymmetric_affine \
+--source-files ./data/dataset/dataset0.txt \
+--kboard VIM3 --print-level 1
+```
+```sh
+$ ./convert \
+--model-name hand-tiny \
+--platform darknet \
+--model /home/yan/yan/tmp/yolo-hand-detection/models/cross-hands-tiny-prn.cfg \
+--weights /home/yan/yan/tmp/yolo-hand-detection/models/cross-hands-tiny-prn.weights \
+--mean-values '0 0 0 0.00390625' \
+--quantized-dtype asymmetric_affine \
+--source-files ./data/dataset/dataset0.txt \
+--kboard VIM3 --print-level 1
+```
+
 
 If you use VIM3L , please use `VIM3L` to replace `VIM3`

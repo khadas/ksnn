@@ -10,9 +10,10 @@ $ python3 xception.py --model ./models/VIM3/xception.nb --library ./libs/libnn_x
 $ ./convert \
 --model-name xception \
 --platform keras \
---model xception.h5 \
---mean-values '127.5,127.5,127.5,127.5' \
+--model /home/yan/yan/Yan/models-zoo/keras/xception/xception.h5 \
+--mean-values '127.5 127.5 127.5 0.007843137' \
 --quantized-dtype asymmetric_affine \
+--source-files ./data/dataset/dataset0.txt \
 --kboard VIM3 --print-level 1
 ```
 

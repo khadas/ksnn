@@ -9,14 +9,15 @@ $ python3 mobilenet_ssd_picture.py --model ./models/VIM3/mobilenet_ssd.nb --libr
 
 ```sh
 $ ./convert \
---model-name inception \
+--model-name inceptionv3 \
 --platform tensorflow \
---model inception_v3_2016_08_28_frozen.pb \
+--model /home/yan/yan/Yan/models-zoo/tensorflow/inception/inception_v3_2016_08_28_frozen.pb \
 --input-size-list '299,299,3' \
 --inputs input \
 --outputs InceptionV3/Predictions/Reshape_1 \
---mean-values '128,128,128,128' \
+--mean-values '128 128 128 0.0078125' \
 --quantized-dtype asymmetric_affine \
+--source-files ./data/dataset/dataset0.txt \
 --kboard VIM3 --print-level 1
 ```
 
@@ -24,12 +25,13 @@ $ ./convert \
 $ ./convert \
 --model-name mobilenet_ssd \
 --platform tensorflow \
---model ssd_mobilenet_v1_coco_2017_11_17.pb \
+--model ~/yan/Yan/models-zoo/tensorflow/mobilenet_ssd/ssd_mobilenet_v1_coco_2017_11_17.pb \
 --input-size-list '300,300,3' \
 --inputs FeatureExtractor/MobilenetV1/MobilenetV1/Conv2d_0/BatchNorm/batchnorm/mul_1 \
 --outputs "'concat concat_1'" \
---mean-values '127.5,127.5,127.5,127.5' \
+--mean-values '127.5 127.5 127.5 0.007843137' \
 --quantized-dtype asymmetric_affine \
+--source-files ./data/dataset/dataset0.txt \
 --kboard VIM3 --print-level 1
 ```
 
