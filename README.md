@@ -12,7 +12,7 @@ $ sudo apt install python3-pip
 
 ```sh
 $ pip3 install matplotlib
-$ pip3 install ksnn/ksnn-1.3-py3-none-any.whl
+$ pip3 install ksnn/ksnn-1.4-py3-none-any.whl
 ```
 
 ## Docs
