@@ -21,6 +21,9 @@ NUM_CLS = 80
 MAX_BOXES = 500
 OBJ_THRESH = 0.3
 NMS_THRESH = 0.5
+mean = [0, 0, 0]
+var = [255]
+
 
 CLASSES = ("person", "bicycle", "car","motorbike ","aeroplane ","bus ","train","truck ","boat","traffic light",
            "fire hydrant","stop sign ","parking meter","bench","bird","cat","dog ","horse ","sheep","cow","elephant",
@@ -212,7 +215,13 @@ if __name__ == '__main__':
     print('Get input data ...')
     cv_img =  list()
     orig_img = cv.imread(picture, cv.IMREAD_COLOR)
-    img = cv.resize(orig_img, (640, 640))
+    img = cv.resize(orig_img, (640, 640)).astype(np.float32)
+    img[:, :, 0] = img[:, :, 0] - mean[0]
+    img[:, :, 1] = img[:, :, 1] - mean[1]
+    img[:, :, 2] = img[:, :, 2] - mean[2]
+    img = img / var[0]
+    
+    img = img.transpose(2, 0, 1)
     cv_img.append(img)
     print('Done.')
 
@@ -245,5 +254,5 @@ if __name__ == '__main__':
         draw(orig_img, boxes, scores, classes)
 
     cv.imwrite("./result.jpg", orig_img)
-    # cv.imshow("results", img)
-    # cv.waitKey(0)
+    cv.imshow("results", img)
+    cv.waitKey(0)

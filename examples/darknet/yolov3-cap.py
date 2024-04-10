@@ -21,6 +21,8 @@ NUM_CLS = 80
 MAX_BOXES = 500
 OBJ_THRESH = 0.5
 NMS_THRESH = 0.6
+mean = [0, 0, 0]
+var = [255]
 
 CLASSES = ("person", "bicycle", "car","motorbike ","aeroplane ","bus ","train","truck ","boat","traffic light",
            "fire hydrant","stop sign ","parking meter","bench","bird","cat","dog ","horse ","sheep","cow","elephant",
@@ -206,9 +208,17 @@ if __name__ == '__main__':
     cap = cv.VideoCapture(int(cap_num))
     cap.set(3,1920)
     cap.set(4,1080)
+    
     while(1):
         cv_img = list()
-        ret,img = cap.read()
+        ret,orig_img = cap.read()
+        img = cv.resize(orig_img, (416, 416)).astype(np.float32)
+        img[:, :, 0] = img[:, :, 0] - mean[0]
+        img[:, :, 1] = img[:, :, 1] - mean[1]
+        img[:, :, 2] = img[:, :, 2] - mean[2]
+        img = img / var[0]
+    
+        img = img.transpose(2, 0, 1)
         cv_img.append(img)
         start = time.time()
         '''
@@ -233,7 +243,7 @@ if __name__ == '__main__':
         boxes, classes, scores = yolov3_post_process(input_data)
 
         if boxes is not None:
-            draw(img, boxes, scores, classes)
+            draw(orig_img, boxes, scores, classes)
 
         cv.imshow("capture", img)
         if cv.waitKey(1) & 0xFF == ord('q'):

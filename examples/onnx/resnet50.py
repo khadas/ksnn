@@ -7,6 +7,9 @@ from ksnn.types import *
 import cv2 as cv
 import time
 
+mean = [126.675, 116.28, 103.53]
+var = [0.01700102]
+
 def show_top5(output):
     output_sorted = sorted(output, reverse=True)
     top5_str = '----Resnet50----\n-----TOP 5-----\n'
@@ -67,7 +70,16 @@ if __name__ == "__main__":
 
     print('Get input data ...')
     cv_img = []
-    img = cv.imread(picture, cv.IMREAD_COLOR)
+    orig_img = cv.imread(picture, cv.IMREAD_COLOR)
+    img = cv.resize(orig_img, (224, 224)).astype(np.float32)
+    img[:, :, 0] = img[:, :, 0] - mean[0]
+    img[:, :, 1] = img[:, :, 1] - mean[1]
+    img[:, :, 2] = img[:, :, 2] - mean[2]
+    img = img * var[0]
+    
+    img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+    
+    img = img.transpose(2, 0, 1)
     cv_img.append(img)
     print('Done.')
     
