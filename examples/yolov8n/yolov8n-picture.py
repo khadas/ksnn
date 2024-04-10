@@ -21,6 +21,8 @@ NUM_CLS = 80
 MAX_BOXES = 500
 OBJ_THRESH = 0.4
 NMS_THRESH = 0.5
+mean = [0, 0, 0]
+var = [255]
 
 constant_martix = np.array([[0,  1,  2,  3,
 			     4,  5,  6,  7,
@@ -46,12 +48,12 @@ def process(input):
 
     grid_h, grid_w = map(int, input.shape[0:2])
 
-    box_class_probs = sigmoid(input[..., :80])
+    box_class_probs = sigmoid(input[..., :NUM_CLS])
 
-    box_0 = softmax(input[...,  80: 96], -1)
-    box_1 = softmax(input[...,  96:112], -1)
-    box_2 = softmax(input[..., 112:128], -1)
-    box_3 = softmax(input[..., 128:144], -1)
+    box_0 = softmax(input[..., NUM_CLS: NUM_CLS + 16], -1)
+    box_1 = softmax(input[..., NUM_CLS + 16:NUM_CLS + 32], -1)
+    box_2 = softmax(input[..., NUM_CLS + 32:NUM_CLS + 48], -1)
+    box_3 = softmax(input[..., NUM_CLS + 48:NUM_CLS + 64], -1)
     result = np.zeros((grid_h, grid_w, 1, 4))
     for i in range(grid_h):
     	for j in range(grid_w):
@@ -218,7 +220,14 @@ if __name__ == '__main__':
     print('Get input data ...')
     cv_img =  list()
     orig_img = cv.imread(picture, cv.IMREAD_COLOR)
-    img = cv.resize(orig_img, (640, 640))
+    img = cv.resize(orig_img, (640, 640)).astype(np.float32)
+    img[:, :, 0] = img[:, :, 0] - mean[0]
+    img[:, :, 1] = img[:, :, 1] - mean[1]
+    img[:, :, 2] = img[:, :, 2] - mean[2]
+    img = img / var[0]
+    
+    img = img.transpose(2, 0, 1)
+    #img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
     cv_img.append(img)
     print('Done.')
 
@@ -251,5 +260,5 @@ if __name__ == '__main__':
         draw(orig_img, boxes, scores, classes)
 
     cv.imwrite("./result.jpg", orig_img)
-    # cv.imshow("results", img)
-    # cv.waitKey(0)
+    cv.imshow("results", img)
+    cv.waitKey(0)

@@ -20,6 +20,9 @@ X_SCALE = 10.0
 H_SCALE = 5.0
 W_SCALE = 5.0
 
+mean = [127.5, 127.5, 127.5]
+var = [128]
+
 CLASSES = ("???","person", "bicycle", "car","motorbike ","aeroplane ","bus ","train","truck ","boat","traffic light",
            "fire hydrant","???","stop sign ","parking meter","bench","bird","cat","dog ","horse ","sheep","cow","elephant",
            "bear","zebra ","giraffe","???","backpack","umbrella","???","???","handbag","tie","suitcase","frisbee","skis","snowboard","sports ball","kite",
@@ -174,7 +177,16 @@ if __name__ == "__main__":
 
     print('Get input data ...')
     cv_img = []
-    img = cv.imread(picture, cv.IMREAD_COLOR)
+    orig_img = cv.imread(picture, cv.IMREAD_COLOR)
+    img = cv.resize(orig_img, (300, 300)).astype(np.float32)
+    img[:, :, 0] = img[:, :, 0] - mean[0]
+    img[:, :, 1] = img[:, :, 1] - mean[1]
+    img[:, :, 2] = img[:, :, 2] - mean[2]
+    img = img / var[0]
+    
+    img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+    
+    img = img
     cv_img.append(img)
     print('Done,')
 
@@ -209,7 +221,7 @@ if __name__ == "__main__":
                 topClassScoreIndex = j
                 topClassScore = score
 
-        if topClassScore > 0.4:
+        if topClassScore > 0.3:
             candidateBox[0][vaildCnt] = i
             candidateBox[1][vaildCnt] = topClassScoreIndex
             scoreBox[0][vaildCnt] = topClassScore
@@ -222,5 +234,5 @@ if __name__ == "__main__":
     nms(vaildCnt, candidateBox, predictions)
 
     # Draw result
-    draw(img, vaildCnt, candidateBox, predictions, scoreBox)
+    draw(orig_img, vaildCnt, candidateBox, predictions, scoreBox)
 
