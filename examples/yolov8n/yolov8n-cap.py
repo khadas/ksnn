@@ -54,13 +54,12 @@ def process(input):
     box_1 = softmax(input[..., NUM_CLS + 16:NUM_CLS + 32], -1)
     box_2 = softmax(input[..., NUM_CLS + 32:NUM_CLS + 48], -1)
     box_3 = softmax(input[..., NUM_CLS + 48:NUM_CLS + 64], -1)
+    
     result = np.zeros((grid_h, grid_w, 1, 4))
-    for i in range(grid_h):
-    	for j in range(grid_w):
-    		result[i, j, :, 0] = np.dot(box_0[i, j], constant_martix)
-    		result[i, j, :, 1] = np.dot(box_1[i, j], constant_martix)
-    		result[i, j, :, 2] = np.dot(box_2[i, j], constant_martix)
-    		result[i, j, :, 3] = np.dot(box_3[i, j], constant_martix)
+    result[..., 0] = np.dot(box_0, constant_martix)[..., 0]
+    result[..., 1] = np.dot(box_1, constant_martix)[..., 0]
+    result[..., 2] = np.dot(box_2, constant_martix)[..., 0]
+    result[..., 3] = np.dot(box_3, constant_martix)[..., 0]
 
     col = np.tile(np.arange(0, grid_w), grid_w).reshape(-1, grid_w)
     row = np.tile(np.arange(0, grid_h).reshape(-1, 1), grid_h)
@@ -69,12 +68,8 @@ def process(input):
     row = row.reshape(grid_h, grid_w, 1, 1)
     grid = np.concatenate((col, row), axis=-1)
 
-    result[..., 0:2] = 0.5 - result[..., 0:2]
-    result[..., 0:2] += grid
-    result[..., 0:2] /= (grid_w, grid_h)
-    result[..., 2:4] = 0.5 + result[..., 2:4]
-    result[..., 2:4] += grid
-    result[..., 2:4] /= (grid_w, grid_h)
+    result[..., 0:2] = (0.5 - result[..., 0:2] + grid) / (grid_w, grid_h)
+    result[..., 2:4] = (0.5 + result[..., 2:4] + grid) / (grid_w, grid_h)
 
     return result, box_class_probs
 
