@@ -1,9 +1,6 @@
 import numpy as np
 import os
 import urllib.request
-from matplotlib import gridspec
-from matplotlib import pyplot as plt
-from PIL import Image
 import argparse
 import sys
 import math
@@ -24,6 +21,7 @@ NMS_THRESH = 0.5
 mean = [0, 0, 0]
 var = [255]
 
+os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 CLASSES = ("person", "bicycle", "car","motorbike ","aeroplane ","bus ","train","truck ","boat","traffic light",
            "fire hydrant","stop sign ","parking meter","bench","bird","cat","dog ","horse ","sheep","cow","elephant",
@@ -254,5 +252,5 @@ if __name__ == '__main__':
         draw(orig_img, boxes, scores, classes)
 
     cv.imwrite("./result.jpg", orig_img)
-    cv.imshow("results", img)
+    cv.imshow("results", orig_img)
     cv.waitKey(0)
