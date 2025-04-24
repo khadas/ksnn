@@ -1,9 +1,6 @@
 import numpy as np
 import os
 import urllib.request
-from matplotlib import gridspec
-from matplotlib import pyplot as plt
-from PIL import Image
 import argparse
 import sys
 import math
@@ -23,6 +20,8 @@ OBJ_THRESH = 0.4
 NMS_THRESH = 0.5
 mean = [0, 0, 0]
 var = [255]
+
+os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 constant_martix = np.array([[0,  1,  2,  3,
 			     4,  5,  6,  7,
@@ -178,6 +177,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--library", help="Path to C static library file")
     parser.add_argument("--model", help="Path to nbg file")
+    parser.add_argument("--type", help="the type for video device")
     parser.add_argument("--device", help="the number for video device")
     parser.add_argument("--level", help="Information printer level: 0/1/2")
 
@@ -193,6 +193,10 @@ if __name__ == '__main__':
         cap_num = args.device
     else :
         sys.exit("video device not found !!! Please use format :--device ")
+    if args.type :
+        cap_type = args.type
+    else :
+        sys.exit("video device not found !!! Please use format :--type ")
     if args.library :
         if os.path.exists(args.library) == False :
             sys.exit('C static library \'{}\' not exist'.format(args.library))
@@ -203,19 +207,26 @@ if __name__ == '__main__':
         level = int(args.level)
     else :
         level = 0
-
+    
     yolov3 = KSNN('VIM3')
     print(' |---+ KSNN Version: {} +---| '.format(yolov3.get_nn_version()))
 
     print('Start init neural network ...')
     yolov3.nn_init(library=library, model=model, level=level)
     print('Done.')
-
-    cap = cv.VideoCapture(int(cap_num))
-    cap.set(3,1920)
-    cap.set(4,1080)
+    
+    if cap_type == "usb":
+    	cap = cv.VideoCapture(int(cap_num), cv.CAP_V4L2)
+    	cap.set(3,1920)
+    	cap.set(4,1080)
+    elif cap_type == "mipi":
+    	pipeline = "v4l2src device=/dev/video" + cap_num + " io-mode=dmabuf ! video/x-raw,format=NV12,width=1920,height=1080,framerate=30/1 ! queue ! videoconvert ! appsink"
+    	cap = cv.VideoCapture(pipeline, cv.CAP_GSTREAMER)
+    else:
+    	sys.exit('Unsupport camera type \'{}\' !!!'.format(cap_type))
     
     while(1):
+        start = time.time()
         cv_img = list()
         ret,orig_img = cap.read()
         
@@ -228,13 +239,12 @@ if __name__ == '__main__':
         img = img.transpose(2, 0, 1)
         
         cv_img.append(img)
-        start = time.time()
+        
         '''
                default input_tensor is 1
         '''
         data = yolov3.nn_inference(cv_img, platform='ONNX', reorder='2 1 0', output_tensor=3, output_format=output_format.OUT_FORMAT_FLOAT32)
-        end = time.time()
-        print('inference : ', end - start)
+        
         input0_data = data[2]
         input1_data = data[1]
         input2_data = data[0]
@@ -253,9 +263,11 @@ if __name__ == '__main__':
         if boxes is not None:
             draw(orig_img, boxes, scores, classes)
 
-        cv.imshow("capture", img)
+        cv.imshow("capture", orig_img)
+        end = time.time()
+        # print('inference : ', end - start)
         if cv.waitKey(1) & 0xFF == ord('q'):
            break
-
+    
     cap.release()
     cv.destroyAllWindows() 
